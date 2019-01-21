@@ -40,6 +40,19 @@ int main(){
 		}
 	}
 
-	execvp(temp[0], temp);
+	//Creating child
+	int pid = fork();
+	if(pid < 0){
+		//error has occured
+		printf("\nError forking\n");
+		return -1;
+	}else if(pid > 0){
+		//parent
+		wait(NULL);
+	}else{
+		//child
+		execvp(temp[0], temp);
+	}
+	//execvp(temp[0], temp);
 	return 0;
 }
