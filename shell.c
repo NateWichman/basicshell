@@ -7,6 +7,14 @@
 
 
 int main(){
+	printf("\n-------------------------\n");
+	printf("Welcome, this is a basic linux shell\n");
+	printf("Authored by Nathan Wichman and Justin King\n");
+	printf("Enter valid linux commands!\n");
+	printf("When your done, just type 'exit'\n");
+	printf("--------------------------\n\n\n");
+
+	while(1){
 	char* params[10];
 	char input[100];
 	printf("\n\nEnter Command and its parameters (if any): ");
@@ -16,11 +24,9 @@ int main(){
 
 	//parsing input string into parameters
 	while(token){
-		printf("\ntoke: %s", token);
 		params[i] = token;
 		for(int j = 0; j < strlen(params[i]); j++){
 			if(params[i][j] == '\n'){
-				printf("\n\nNEWLINE FOUND\n\n");
 				params[i][j] = '\0';
 				params[i+1] = NULL;
 				token = NULL;
@@ -33,11 +39,16 @@ int main(){
 	
 	char* temp[10];
 	for(int i = 0; i < 10; i++){
-		printf("\nparams: %s", params[i]);
 		temp[i] = params[i];
 		if(params[i] == NULL){
 			break;
 		}
+	}
+	
+	if(strcmp(temp[0], "exit")==0){
+		printf("\nExiting Shell\n\n");
+		printf("------------------------\n\n");
+		return 0;
 	}
 
 	//Creating child
@@ -51,8 +62,11 @@ int main(){
 		wait(NULL);
 	}else{
 		//child
-		execvp(temp[0], temp);
+		if(execvp(temp[0], temp) != 0){
+			printf("\nInvalid Linux Command\n");
+		}
 	}
 	//execvp(temp[0], temp);
+	}
 	return 0;
 }
