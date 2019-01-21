@@ -15,7 +15,9 @@ int main(){
 	printf("--------------------------\n\n\n");
 
 	while(1){
+	//will hold the linux command and its parameters
 	char* params[10];
+	//raw user input
 	char input[100];
 	printf("\n\nEnter Command and its parameters (if any): ");
 	fgets(input, 100, stdin);
@@ -26,6 +28,7 @@ int main(){
 	while(token){
 		params[i] = token;
 		for(int j = 0; j < strlen(params[i]); j++){
+			//removing any newline charachters
 			if(params[i][j] == '\n'){
 				params[i][j] = '\0';
 				params[i+1] = NULL;
@@ -37,6 +40,7 @@ int main(){
 		i++;
 	}
 	
+	//Trimming down unnececary elements of params
 	char* temp[10];
 	for(int i = 0; i < 10; i++){
 		temp[i] = params[i];
@@ -45,13 +49,14 @@ int main(){
 		}
 	}
 	
+	//Checking for exit conditions
 	if(strcmp(temp[0], "exit")==0){
 		printf("\nExiting Shell\n\n");
 		printf("------------------------\n\n");
 		return 0;
 	}
 
-	//Creating child
+	//Forking this parent process into a parent and a child
 	int pid = fork();
 	if(pid < 0){
 		//error has occured
@@ -59,14 +64,15 @@ int main(){
 		return -1;
 	}else if(pid > 0){
 		//parent
+		//waiting for child to terminate
 		wait(NULL);
 	}else{
 		//child
+		//executing command
 		if(execvp(temp[0], temp) != 0){
 			printf("\nInvalid Linux Command\n");
 		}
 	}
-	//execvp(temp[0], temp);
 	}
 	return 0;
 }
